@@ -1,0 +1,30 @@
+<ng-container [ngTemplateOutlet]="dropdownToggleContent"></ng-container>
+<!--opacity-0 hidden -->
+<!--position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 56px);-->
+<div
+  #menu
+  class="dropdown-menu"
+  [ngClass]="{'hidden opacity-0 mt-10': !isDropdownOpen(), 'block absolute right-0 top-full opacity-100 mt-0': isDropdownOpen()}"
+>
+  @if (items) {
+    <div class="p-1 space-y-0.5">
+      @for (item of items; track $index) {
+        <div class="dropdown-item-wrapper" (click)="item.onClick?.($index)">
+          <ng-container [ngTemplateOutlet]="dropdownItemTemplate || defaultDropdownItem" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+        </div>
+        <ng-template #defaultDropdownItem>
+          <a
+            class="dropdown-item"
+            [ngClass]="item.styleClass"
+            [routerLink]="item.route"
+          >
+            @if (item.icon) {
+              <lucide-icon class="shrink-0 size-4" [name]="item.icon"></lucide-icon>
+            }
+            {{item.label}}
+          </a>
+        </ng-template>
+      }
+    </div>
+  }
+</div>

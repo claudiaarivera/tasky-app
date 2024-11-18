@@ -1,0 +1,13 @@
+<div
+  class="flex h-1.5 bg-gray-200 rounded-full overflow-hidden"
+  role="progressbar"
+  [ariaValueNow]="valueFormated()"
+  [ariaValueMin]="0"
+  [ariaValueMax]="100"
+>
+  <div
+    [ngClass]="progressBgClass"
+    class="flex flex-col justify-center rounded-full overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap duration-500 transition-[width,background]"
+    [style.width]="valueFormated() + '%'"
+  ></div>
+</div>

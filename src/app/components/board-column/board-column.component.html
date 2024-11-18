@@ -1,0 +1,49 @@
+@if (section) {
+<div class="bg-transparent w-full px-2 py-3 gap-y-3 rounded-2xl flex flex-col overflow-hidden">
+  <div class="flex items-center gap-2.5 py-1 pr-2 h-10">
+    <div class="flex items-center gap-2">
+      <app-section-name
+        [value]="section!.name"
+        (onNameChanged)="updateSectionName($event)"
+      ></app-section-name>
+      @if (taskLength > 0) {
+      <span
+        class="inline-flex items-center py-0.5 px-1.5 rounded-md text-xs font-medium bg-gray-200 text-neutral-700"
+        >{{ taskLength }}</span
+      >
+      }
+    </div>
+    <div class="ml-auto flex items-center gap-1.5">
+      <button
+        type="button"
+        (click)="onAddTask.emit()"
+        class="flex shrink-0 justify-center items-center size-5 text-gray-500 hover:text-neutral-600 focus:outline-none"
+      >
+        <lucide-icon name="plus" class="size-5"></lucide-icon>
+      </button>
+      <button
+        type="button"
+        (click)="onDeleteSection.emit()"
+        class="flex shrink-0 justify-center items-center size-5 text-gray-500 hover:text-neutral-600 focus:outline-none"
+      >
+        <lucide-icon name="trash" class="size-4"></lucide-icon>
+      </button>
+      @if (dragHandleTemplate) {
+      <ng-container [ngTemplateOutlet]="dragHandleTemplate"></ng-container>
+      }
+    </div>
+    <!--delete(archive), edit, duplicate-->
+  </div>
+  @if (taskLength > 0) {
+  <div class="flex flex-col gap-y-3 overflow-y-auto">
+    <ng-content></ng-content>
+  </div>
+  }
+  <button
+    (click)="onAddTask.emit()"
+    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-sm font-medium rounded-lg border border-transparent text-fuchsia-400 hover:text-fuchsia-500 focus:outline-none focus:text-fuchsia-500 disabled:opacity-50 disabled:pointer-events-none"
+  >
+    <lucide-icon name="plus" size="18"></lucide-icon> Add task
+  </button>
+</div>
+}

@@ -1,0 +1,69 @@
+<div
+  cdkDropList
+  class="flex"
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="moveSection($event)"
+>
+  <div class="grid grid-flow-col auto-cols-[285px] gap-x-4" cdkDropListGroup>
+    @for (section of sections(); track section.id) {
+    <app-board-column
+      cdkDrag
+      cdkDropList
+      [cdkDropListData]="section"
+      (cdkDropListDropped)="moveTask($event)"
+      cdkDragPreviewContainer="parent"
+      [section]="section"
+      (onAddTask)="openTaskDialig({ section: section.id })"
+      (onDeleteSection)="deleteSection(section.id)"
+      (onSectionNameChanged)="updateSectionName(section.id, $event)"
+    >
+      <ng-template #dragHandle>
+        <button
+          type="button"
+          cdkDragHandle
+          class="flex shrink-0 justify-center items-center size-5 text-gray-500 hover:text-neutral-600 focus:outline-none"
+        >
+          <lucide-icon name="grip-horizontal" class="size-4"></lucide-icon>
+        </button>
+      </ng-template>
+        @for (task of section.tasks; track task.id) {
+          <app-task-card
+            cdkDrag
+            cdkDragPreviewContainer="parent"
+            (onTaskCompletionChanged)="toggleSubtaskCompletion(task, $event)"
+            (onEditTask)="openTaskDialig({ task })"
+            (onDeleteTask)="deleteTask(task)"
+            [task]="task"
+          ></app-task-card>
+          }
+     
+    </app-board-column>
+    }
+    <div>
+      @if (!isAddSectionModeActive()) {
+      <button
+        type="button"
+        (click)="showSectionForm()"
+        class="py-1.5 px-2.5 inline-flex items-center gap-x-1 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+      >
+        <lucide-icon class="size-5 text-fuchsia-500" name="plus"></lucide-icon>
+        Add section
+      </button>
+      } @if (isAddSectionModeActive()) {
+        <form (submit)="$event.preventDefault()">
+          <input
+            [formControl]="sectionFormControl"
+            type="text"
+            #newSectionControl
+            id="newSectionControl"
+            autofocus
+            (keyup.enter)="addSection()"
+            (blur)="addSection()"
+            class="py-1.5 px-2.5 block w-full border-gray-200 rounded-md text-sm focus:outline-none focus:ring focus:border-fuchsia-400 focus:ring-fuchsia-400 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Section name"
+          />
+        </form>
+      }
+    </div>
+  </div>
+</div>

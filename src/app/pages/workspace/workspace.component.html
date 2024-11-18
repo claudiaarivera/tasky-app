@@ -1,0 +1,14 @@
+<div class="flex flex-col h-[calc(100vh-(40px+30px))] gap-y-8 overflow-x-hidden">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-y-4 sm:gap-y-0">
+    <h1 class="text-3xl font-bold mr-auto">🚀Workspace</h1>
+    <app-view-types></app-view-types>
+  </div>
+  <div class="flex-1 flex overflow-x-auto p-2">
+    @if (activeViewType() === 'board') {
+      <app-board-view></app-board-view>
+    }
+    @if (activeViewType() === 'list') {
+      <app-list-view></app-list-view>
+    }
+  </div>
+</div>

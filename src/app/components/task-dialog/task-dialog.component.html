@@ -1,0 +1,294 @@
+<div class="flex items-center justify-between py-3 px-4">
+  <h2 class="text-lg text-neutral-800 font-semibold">Edit task</h2>
+  <div class="flex items-center gap-2">
+    <!--<lucide-icon name="circle-check" class="fill-blue-600" color="white" [strokeWidth]="0"></lucide-icon>-->
+    <button
+      type="button"
+      [ngClass]="{
+        'bg-gray-50': isTaskCompleted,
+        'bg-white': !isTaskCompleted
+      }"
+      (click)="toggleTaskCompletion()"
+      class="py-1.5 px-2.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-lg border text-gray-800 border-gray-200 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+    >
+      @if (isTaskCompleted) {
+      <lucide-icon
+        name="circle-check"
+        class="fill-blue-500 size-[18px]"
+        color="white"
+        [strokeWidth]="0"
+      ></lucide-icon>
+      Completed } @else {
+      <lucide-icon name="check" class="shrink-0 size-[18px]"></lucide-icon>
+      Mark complete }
+    </button>
+    <!--
+     <button
+      type="button"
+      class="py-1.5 px-2.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-lg border border-gray-200 bg-white text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+    >
+     <lucide-icon
+        name="circle-check"
+        class="fill-blue-600 size-5"
+        color="white"
+        [strokeWidth]="0"
+      ></lucide-icon>
+      <lucide-icon
+        class="shrink-0 size-4 text-blue-500"
+        name="check"
+      ></lucide-icon>
+      <lucide-icon
+        name="circle-check"
+        class="fill-emerald-500 size-5"
+        color="white"
+        [strokeWidth]="0"
+      ></lucide-icon>
+      Completed
+    </button>
+    <button type="button" class="py-1.5 px-2.5 inline-flex items-center gap-x-1 text-xs font-semibold rounded-lg bg-emerald-50 text-gray-800	 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
+      <lucide-icon class="shrink-0 size-4" name="check"></lucide-icon>
+      Completed
+    </button>-->
+    <button
+      (click)="dialogRef.close()"
+      class="size-5 text-gray-600 hover:text-gray-700 focus:outline-none"
+    >
+      <lucide-icon class="size-4" name="x"></lucide-icon>
+    </button>
+  </div>
+</div>
+<div class="py-3 px-4 overflow-y-auto">
+  <form (keydown.enter)="false" (ngSubmit)=" submitTaskForm()" [formGroup]="taskForm">
+    <div class="grid gap-y-4 gap-x-4 grid-cols-8 mb-5">
+      <div class="col-span-full">
+        <label class="text-sm font-medium text-gray-900 mb-2 block" for=""
+          >Title<span class="text-red-500 ml-0.5">*</span></label
+        >
+        <input
+          formControlName="title"
+          type="text"
+          id="title"
+          class="py-2 px-2.5 block bg-transparent w-full ring-1 ring-neutral-200 rounded-md text-sm shadow focus:outline-none focus:ring-2 focus:ring-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none"
+        />
+        <ng-container
+          [ngTemplateOutlet]="templateError"
+          [ngTemplateOutletContext]="{
+            message: 'This field is required',
+            control: taskForm.controls.title,
+            validation: 'required'
+          }"
+        ></ng-container>
+      </div>
+      <div class="col-span-full">
+        <label class="text-sm font-medium text-gray-900 mb-2 block" for=""
+          >Description<span class="text-red-500 ml-0.5">*</span></label
+        >
+        <textarea
+          formControlName="description"
+          id="description"
+          [rows]="4"
+          class="py-2 px-2.5 block bg-transparent w-full text-gray-900 ring-1 ring-inset ring-neutral-200 rounded-md text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none"
+        ></textarea>
+        <ng-container
+          [ngTemplateOutlet]="templateError"
+          [ngTemplateOutletContext]="{
+            message: 'This field is required',
+            control: taskForm.controls.description,
+            validation: 'required'
+          }"
+        ></ng-container>
+      </div>
+      <div class="col-span-full md:col-span-3">
+        <label class="text-sm font-medium text-gray-900 mb-2 block" for=""
+          >Priority<span class="text-red-500 ml-0.5">*</span></label
+        >
+        <ng-select
+          [items]="priorities()"
+          [searchable]="false"
+          [clearable]="false"
+          placeholder="Select priority"
+          formControlName="priority"
+          id="priority"
+        >
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            <div class="inline-flex items-center gap-2 text-sm font-medium">
+              <span
+                class="size-2 inline-block rounded-full"
+                [ngClass]="getPriorityClasses(item)"
+              ></span>
+              {{ item.level | titlecase }}
+            </div>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <div class="inline-flex items-center gap-2 text-sm font-medium">
+              <span
+                class="size-2 inline-block rounded-full"
+                [ngClass]="priorityClasses['blue']"
+              ></span>
+              {{ item.level | titlecase }}
+            </div>
+          </ng-template>
+        </ng-select>
+        <ng-container
+          [ngTemplateOutlet]="templateError"
+          [ngTemplateOutletContext]="{
+            message: 'This field is required',
+            control: taskForm.controls.priority,
+            validation: 'required'
+          }"
+        ></ng-container>
+      </div>
+      <div class="col-span-full md:col-span-5">
+        <label class="text-sm font-medium text-gray-900 mb-2 block" for=""
+          >Due date</label
+        >
+        <input
+          type="date"
+          formControlName="dueDate"
+          id="dueDate"
+          class="py-2 px-2.5 block bg-transparent w-full ring-1 ring-neutral-200 rounded-md text-sm shadow focus:outline-none focus:ring-2 focus:ring-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none"
+        />
+      </div>
+      <div class="col-span-full">
+        <label class="text-sm font-medium text-gray-900 mb-2 block" for=""
+          >Tags</label
+        >
+        <ng-select
+          [items]="[]"
+          formControlName="tags"
+          id="tags"
+          [addTag]="true"
+          [multiple]="true"
+          [selectOnTab]="true"
+          [isOpen]="false"
+        >
+        </ng-select>
+        <!--<select
+          class="py-2 px-2.5 block bg-transparent w-full ring-1 ring-neutral-200 rounded-md text-sm shadow focus:outline-none focus:ring-2 focus:ring-fuchsia-400 disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <option value="">Select priority</option>
+        </select>-->
+      </div>
+      <div class="col-span-full">
+        <div class="flex flex-col gap-3 justify-between mb-3">
+          @let subtaskCount = subtasks.length; @let taskProgress = taskFormValue
+          | completedSubtaskCount | percentageFromTotal: subtaskCount;
+          <div class="flex justify-between">
+            <h3 class="font-medium text-sm text-gray-900">Subtasks</h3>
+            @if (subtaskCount > 0) {
+              <span class="text-xs font-medium text-gray-500"
+                >{{ taskProgress }}% completed</span
+              >
+            }
+          </div>
+          @if (subtaskCount > 0) {
+          <app-task-progress-bar [value]="taskProgress"></app-task-progress-bar>
+          }
+        </div>
+        <!--<div formArrayName="subtasks" class="flex flex-col mb-2">
+            <ng-container *ngFor="let task of subtasks.controls; let i = index">
+              <div [formGroupName]="i" class="flex items-center gap-3 hover:bg-gray-50 rounded-md py-1.5 px-2">
+                <input [id]="'subtask-' + i" formControlName="completed" type="checkbox" class="rounded-full text-fuchsia-400 focus:ring-fuchsia-400">
+                <input type="text" formControlName="description" placeholder="Type your task.." [ngClass]="{'line-through': task.controls.completed.value}" class="border-none bg-transparent text-sm text-gray-950 placeholder:text-sm placeholder:text-gray-400 focus:outline-none flex-1">
+                <button (click)="deleteSubtask(i)" class="flex-shrink-0 flex justify-center items-center size-6 text-sm font-medium rounded-lg border border-transparent bg-transparent text-gray-600 hover:text-gray-700 focus:text-gray-700 focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
+                  <lucide-icon class="size-5" name="x"></lucide-icon>
+                </button>
+              </div>
+            </ng-container>
+        </div>-->
+        <ng-container formArrayName="subtasks">
+          @for (subtask of subtasks.controls; track subtask; let index = $index){
+            <div [formGroupName]="index">
+              @let description = subtask.controls.description.value; @let
+              completed = subtask.controls.completed.value;
+              <app-subtask-item
+                [subtask]="{ completed, description}"
+                [id]="index"
+                (onSubtaskDescriptionChanged)="
+                  updateSubtaskDescription(index, $event)
+                "
+                (onTaskCompletionChanged)="toggleSubtaskCompletion(index, $event)"
+                (onDeleteSubtask)="deleteSubtask(index)"
+              ></app-subtask-item>
+              <!--<div
+                    class="flex items-center gap-3 hover:bg-gray-50 rounded-md py-1.5 px-2"
+                  >
+                    <input
+                      [id]="'subtask-' + index"
+                      formControlName="completed"
+                      type="checkbox"
+                      class="rounded-full text-fuchsia-400 focus:ring-fuchsia-400"
+                    />
+                    <input
+                      type="text"
+                      formControlName="description"
+                      placeholder="Type your task.."
+                      [ngClass]="{ 'line-through': subtask.controls.completed.value }"
+                      class="border-none bg-transparent text-sm text-gray-950 placeholder:text-sm placeholder:text-gray-400 focus:outline-none flex-1"
+                    />
+                    <button
+                      type="button"
+                      (click)="deleteSubtask(index)"
+                      class="flex-shrink-0 flex justify-center items-center size-6 text-sm font-medium rounded-lg border border-transparent bg-transparent text-gray-600 hover:text-gray-700 focus:text-gray-700 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      <lucide-icon class="size-5" name="x"></lucide-icon>
+                    </button>
+                  </div>-->
+            </div>
+          } 
+          @if (isNewSubtaskControlActive()) {
+            <app-subtask-item
+              [editModeActiveInitialValue]="true"
+              (onSubtaskDescriptionChanged)="addSubtask($event)"
+              (onDeleteSubtask)="isNewSubtaskControlActive.set(false)"
+              (onEditModeActiveChanged)="isNewSubtaskControlActive.set($event)"
+            ></app-subtask-item>
+          }
+        </ng-container>
+        @if (!isNewSubtaskControlActive()) {
+        <button
+          type="button"
+          (click)="isNewSubtaskControlActive.set(true)"
+          class="py-1 px-1.5 inline-flex items-center gap-x-1 text-sm font-medium text-fuchsia-400 hover:text-fuchsia-500 focus:outline-none focus:text-fuchsia-500 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <lucide-icon name="plus" size="18"></lucide-icon>Add subtask
+        </button>
+        }
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        [disabled]="isSaving()"
+        [ngClass]="{'cursor-not-allowed': isSaving()}"
+        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg shadow-sm border border-transparent bg-fuchsia-500 text-white hover:bg-fuchsia-600 focus:outline-none focus:bg-fuchsia-600 disabled:opacity-75"
+      > 
+        @if (isSaving()) {
+          <span class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
+            <span class="sr-only">Loading...</span>
+          </span>
+        }
+        {{ isSaving() ? 'Saving...' : 'Save'}}
+      </button>
+    </div>
+  </form>
+</div>
+<ng-template
+  #templateError
+  let-message="message"
+  let-control="control"
+  let-validation="validation"
+>
+  @if (control.hasError(validation) && control.touched) {
+  <p class="text-xs text-red-600 mt-2">{{ message }}</p>
+  }
+</ng-template>
+
+<!--
+border 
+border-input color
+shadow-sm 
+transition-colors //transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; 
+placeholder:text-muted-foreground 
+focus-visible:ring-1 
+-->

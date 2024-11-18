@@ -1,0 +1,41 @@
+<div class="flex items-center gap-1">
+  @if (!isEditModeActive()) {
+    <h2
+      class="text-gray-800 font-semibold text-lg"
+      [ngClass]="{'cursor-pointer': !showToggleIcon}"
+      (click)="!showToggleIcon && activeEditMode()"
+    >
+      {{ sectionNameValue }}
+    </h2>
+  } 
+  @else {
+    <form (submit)="$event.preventDefault()">
+      <input
+        [formControl]="sectionNameControl"
+        type="text"
+        #sectionControl
+        (keyup.enter)="emitValue();isEditModeActive.set(false)"
+        id="newSectionControl"
+        class="py-1 px-2.5 block text-gray-800 font-semibold w-full border-gray-200 rounded-md text-base focus:outline-none focus:ring focus:border-fuchsia-400 focus:ring-fuchsia-400 disabled:opacity-50 disabled:pointer-events-none"
+        placeholder="Section name"
+      />
+    </form>
+  }
+  @if (showToggleIcon) {
+    @if (!isEditModeActive()) {
+      <button
+        (click)="activeEditMode()"
+        class="flex justify-center items-center size-6 bg-transparent text-gray-700 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+      > 
+        <lucide-icon name="pencil-line" class="shrink-0 size-4"></lucide-icon>
+      </button>
+    }@else {
+      <button
+        (click)="emitValueAndDesactiveEditMode()"
+        class="flex justify-center items-center size-6 bg-transparent text-gray-700 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+      > 
+        <lucide-icon name="check" class="shrink-0 size-4"></lucide-icon>
+      </button>
+    }
+  }
+</div>

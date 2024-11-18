@@ -1,0 +1,106 @@
+<div class="flex flex-col bg-white border shadow rounded-xl py-2 px-3">
+  <div class="flex items-center justify-between mb-1.5 relative">
+    <div class="absolute top-[2.5px] left-0">
+      <input
+        [id]="'task-completed-checkbox-' + task.id"
+        (change)="changeTaskCompletionCheckbox($event)"
+        type="checkbox"
+        [checked]="task.completed"
+        class="rounded-full text-blue-500 focus:ring-blue-500 hover:border-gray-300 hover:bg-gray-100"
+      />
+    </div>
+    <h3 class="text-base leading-snug font-semibold text-gray-800 line-clamp-3 indent-6">{{ task.title }}</h3>
+    <app-dropdown #dropdown [items]="items">
+      <ng-template #dropdownToggle>
+        <button
+          type="button"
+          (click)="dropdown.toggle()"
+          class="flex justify-center items-center size-6 text-sm font-medium rounded-lg border border-transparent bg-transparent text-neutral-600 hover:bg-neutral-300 focus:outline-none focus:bg-neutral-300 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <lucide-icon class="size-5" name="ellipsis"></lucide-icon>
+        </button>
+      </ng-template>
+      <ng-template #dropdownItem let-item>
+        <button
+          class="dropdown-item"
+          [ngClass]="{ 'text-red-500': item.id === 'delete' }"
+        >
+          <lucide-icon class="shrink-0 size-4" [name]="item.icon"></lucide-icon>
+          <span>{{ item.label }}</span>
+        </button>
+      </ng-template>
+    </app-dropdown>
+  </div>
+  @if (task.tags && task.tags.length > 0) {
+  <div class="flex gap-2 mb-4">
+    @for (tag of task.tags; track $index) {
+    <span
+      class="inline-flex items-center gap-x-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-gray-100 text-gray-700 shadow-sm"
+      >{{ tag }}</span
+    >
+    }
+  </div>
+  }
+  <p class="text-neutral-700 text-sm">
+    {{ task.description }}
+  </p>
+  <hr class="border-gray-200 border-1 border-dashed my-3" />
+  <div class="flex items-center gap-2.5">
+    @if (task.dueDate) {
+    <div class="inline-flex items-center space-x-1 text-neutral-600">
+      <lucide-icon name="calendar" size="18"></lucide-icon>
+      <span class="text-sm font-medium">{{
+        task.dueDate | date : "MMM d, y"
+      }}</span
+      ><!--october 16-->
+    </div>
+    }
+    <div class="ml-auto flex items-center gap-2">
+      <!--@let subtaskCount = task.subtasks?.length || 0; 
+      @if (subtaskCount > 0) {
+        @let completedTaskCount = task | completedSubtaskCount;
+        <div
+          class="inline-flex items-center gap-x-2 py-1 px-1.5 rounded-lg text-sm font-semibold border border-gray-200 bg-white text-neutral-600 shadow-sm"
+        >
+          <div class="relative size-4">
+            <svg
+              class="size-full -rotate-90"
+              viewBox="0 0 36 36"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                class="stroke-current text-gray-100"
+                stroke-width="5"
+              ></circle>
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                class="stroke-current text-green-500"
+                stroke-width="5"
+                stroke-dasharray="100"
+                stroke-dashoffset="50"
+                stroke-linecap="round"
+              ></circle>
+            </svg>
+          </div>
+          <span>{{ completedTaskCount }}/{{ subtaskCount }}</span>
+        </div>
+      } -->
+      @let priority = task.priority; @if (priority) {
+      <app-priority-badge [priority]="priority"></app-priority-badge>
+      <!--<span
+          class="inline-flex items-center gap-x-1.5 py-1 px-1.5 rounded-lg text-sm font-semibold border border-gray-200 bg-white text-neutral-600 shadow-sm"
+        >
+          <span class="size-1.5 inline-block rounded-full" [ngClass]="priorityClasses[priority.color]"></span>
+          {{priority.level| titlecase}}
+        </span>-->
+      }
+    </div>
+  </div>
+</div>

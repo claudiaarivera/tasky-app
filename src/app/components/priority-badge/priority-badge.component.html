@@ -1,0 +1,9 @@
+<span
+  class="inline-flex items-center gap-x-1.5 py-0.5 px-1.5 rounded-lg text-sm font-semibold border border-gray-200 bg-white text-neutral-600 shadow-sm"
+>
+  <span
+    class="size-1.5 inline-block rounded-full"
+    [ngClass]="priorityClasses[priority.color]"
+  ></span>
+  {{ priority.level | titlecase }}
+</span>

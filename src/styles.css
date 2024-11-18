@@ -1,0 +1,64 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+@tailwind base;
+@layer base {
+  html{
+    height: 100%;
+    color: theme('colors.neutral.900');
+  }
+  
+  input[type="checkbox"]:checked{
+    border-color: transparent;
+    background-color: currentColor;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-image: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.2448 5.97559L8.02962 13.1908L4.75 9.91113" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>');  
+  }
+}
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  [type="checkbox"]{
+    /**#6b7280**/
+    @apply appearance-none size-4 cursor-pointer rounded-md border-2 flex-shrink-0 block align-middle border-gray-200 checked:border-transparent text-fuchsia-500 focus:ring-fuchsia-500 focus:ring-offset-2 focus:ring-2;
+  }
+  .dropdown {
+    @apply relative inline-flex;
+    /**group*/
+  }
+  .dropdown-menu {
+    @apply  min-w-60 bg-white shadow rounded-lg divide-y divide-gray-200;
+  }
+  .dropdown-item {
+    @apply w-full flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100;
+  }
+}
+.ng-select .ng-select-container {
+  border: none;
+  @apply ring-1 ring-neutral-200 shadow;
+}
+.ng-select.ng-select-opened > .ng-select-container:hover {
+  @apply shadow;
+}
+
+.ng-select .ng-select-container:hover{
+  @apply shadow;
+}
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container{
+  @apply ring-2 ring-fuchsia-400;
+}
+
+.ng-select.custom .ng-select-container  {            
+  min-height: 0px;
+  border-radius: 0;
+}
+/*.cdk-drag-preview {
+  background-color: #80f5ce;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}*/

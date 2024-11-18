@@ -1,0 +1,45 @@
+<div class="flex items-center gap-2 hover:bg-gray-50 rounded-md py-1.5 px-2">
+  @let isActive =editModeIsActive();
+  @let completed = subtask()?.completed;
+  <div class="w-4">
+    @if (subtask()) {
+      <input
+        [id]="'subtask-checkbox' + id()"
+        (change)="changeTaskCompletionCheckbox($event)"
+        type="checkbox"
+        [checked]="completed"
+        class="rounded-full text-fuchsia-400 focus:ring-fuchsia-400"
+      />
+    }
+  </div>
+  @if (isActive) {
+    <input
+      #subtaskInput
+      type="text"
+      placeholder="Type your task.."
+      [formControl]="control"
+      class="border-none bg-transparent text-sm text-gray-950 placeholder:text-sm placeholder:text-gray-400 focus:outline-none flex-1"
+    />
+  }
+  @else {
+    <p (click)="editModeIsActive.set(true)" class="text-sm text-gray-950 cursor-pointer flex-1" [ngClass]="{ 'line-through': completed }">
+      {{ subtask()?.description }}
+    </p>
+  }
+  @if (isActive) {
+    <button
+      type="button"
+      (click)="updateSubtaskDescription()"
+      class="flex-shrink-0 flex justify-center items-center size-6 text-sm font-medium rounded-lg border border-transparent bg-transparent text-gray-600 hover:text-gray-700 focus:text-gray-700 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+    >
+      <lucide-icon class="size-5" name="check"></lucide-icon>
+    </button>
+  }
+  <button
+    type="button"
+    (click)="onDeleteSubtask.emit()"
+    class="flex-shrink-0 flex justify-center items-center size-6 text-sm font-medium rounded-lg border border-transparent bg-transparent text-gray-600 hover:text-gray-700 focus:text-gray-700 focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+  >
+    <lucide-icon class="size-5" name="x"></lucide-icon>
+  </button>
+</div>

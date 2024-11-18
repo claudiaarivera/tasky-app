@@ -1,0 +1,40 @@
+<div
+  [ngClass]="{ 'mb-4': section.tasks.length > 0 }"
+  class="flex items-center gap-2"
+>
+  <app-section-name
+    [value]="section!.name"
+    [showToggleIcon]="true"
+    (onNameChanged)="onSectionNameChanged.emit($event)"
+  ></app-section-name>
+  <button
+    (click)="onDeleteSection.emit()"
+    class="flex justify-center items-center size-6 bg-transparent text-gray-700 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+  >
+    <lucide-icon name="trash" class="shrink-0 size-4"></lucide-icon>
+  </button>
+  @let taskLength = section.tasks.length; 
+  @if (taskLength > 0) {
+    <span
+      class="shrink-0 inline-flex items-center py-0.5 px-1.5 rounded-md text-xs font-medium bg-gray-50 border-[1.5px] border-neutral-200 text-neutral-600"
+      >{{ section.tasks.length }}</span
+    >
+  }
+  <div class="ml-auto flex items-center gap-2">
+    <button
+      (click)="onAddTask.emit()"
+      class="py-1.5 px-2.5 inline-flex items-center gap-x-1 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+    >
+      <lucide-icon
+        name="plus"
+        class="shrink-0 size-4 text-fuchsia-500"
+      ></lucide-icon>
+      Add task
+    </button>
+  </div>
+</div>
+@if (section.tasks.length > 0) {
+  <div class="section-items-wrapper flex flex-col gap-y-3">
+    <ng-content></ng-content>
+  </div>
+}
